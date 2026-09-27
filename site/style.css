@@ -1,0 +1,252 @@
+/* ---------------------------------------------------------
+   TOKENS
+   Color   — sampled from the footage itself
+     --sky        #dbe7ee  overcast coastal sky / page background
+     --ocean      #2f5d73  deep water / links & mid accents
+     --asphalt    #17161a  road / dark grounding color
+     --aluminum   #b9bcc0  brushed metal / secondary text on dark
+     --signal     #c8202c  brake‑caliper red / the one accent
+     --paper      #f3f1ec  off‑white for light text blocks
+
+   Type
+     --f-display  'Big Shoulders Display' — condensed, industrial, tall
+     --f-body     'IBM Plex Sans'         — engineered, humanist
+     --f-mono     'IBM Plex Mono'         — spec sheets, readouts, counters
+--------------------------------------------------------- */
+
+:root{
+  --sky: #dbe7ee;
+  --ocean: #2f5d73;
+  --asphalt: #17161a;
+  --aluminum: #b9bcc0;
+  --signal: #c8202c;
+  --paper: #f3f1ec;
+
+  --f-display: 'Big Shoulders Display', sans-serif;
+  --f-body: 'IBM Plex Sans', sans-serif;
+  --f-mono: 'IBM Plex Mono', monospace;
+}
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+
+html{ background: var(--sky); scroll-behavior:auto; }
+
+body{
+  background: var(--sky);
+  color: var(--paper);
+  font-family: var(--f-body);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection{ background: var(--signal); color: var(--paper); }
+
+/* ---------------- Loader ---------------- */
+.loader{
+  position: fixed; inset:0; z-index: 200;
+  background: var(--asphalt);
+  display:flex; align-items:center; justify-content:center;
+  transition: opacity .6s ease, visibility .6s ease;
+}
+.loader.hidden{ opacity:0; visibility:hidden; pointer-events:none; }
+.loader-inner{ width: min(320px, 70vw); text-align:left; }
+.loader-eyebrow{
+  font-family: var(--f-mono); font-size: 11px; letter-spacing: .18em;
+  color: var(--aluminum); display:block; margin-bottom: 10px;
+}
+.loader-count{
+  font-family: var(--f-display); font-weight:700; font-size: 56px;
+  color: var(--paper); display:block; line-height:1; margin-bottom: 18px;
+  font-variant-numeric: tabular-nums;
+}
+.loader-track{
+  height: 2px; width:100%; background: rgba(255,255,255,.15);
+}
+.loader-fill{
+  height:100%; width:0%; background: var(--signal);
+  transition: width .15s linear;
+}
+
+/* ---------------- Chrome ---------------- */
+.chrome{
+  position: fixed; top:0; left:0; right:0; z-index: 50;
+  display:flex; justify-content:space-between; align-items:flex-start;
+  padding: 22px 26px;
+  pointer-events:none;
+  mix-blend-mode: normal;
+}
+.chrome-left{ display:flex; flex-direction:column; }
+.wordmark{
+  font-family: var(--f-display); font-weight:700; font-size: 18px;
+  letter-spacing:.04em; color: var(--paper);
+  text-shadow: 0 1px 12px rgba(0,0,0,.35);
+}
+.wordmark-sub{
+  font-family: var(--f-mono); font-size: 9.5px; letter-spacing:.18em;
+  color: var(--aluminum); margin-top:3px;
+  text-shadow: 0 1px 8px rgba(0,0,0,.4);
+}
+.frame-readout{
+  font-family: var(--f-mono); font-size: 12px; letter-spacing:.06em;
+  color: var(--aluminum);
+  text-shadow: 0 1px 8px rgba(0,0,0,.4);
+  font-variant-numeric: tabular-nums;
+}
+#frameNum{ color: var(--paper); }
+
+/* ---------------- Scroll stage / pin ---------------- */
+.scroll-stage{
+  position: relative;
+  width: 100%;
+  /* height set by JS based on frame count */
+}
+.pin{
+  position: sticky;
+  top:0; left:0;
+  width:100%; height:100vh;
+  overflow: hidden;
+  background: var(--asphalt);
+}
+#frameCanvas{
+  position:absolute; inset:0;
+  width:100%; height:100%;
+  display:block;
+}
+
+.scrim{ position:absolute; left:0; right:0; pointer-events:none; z-index:2; }
+.scrim-top{
+  top:0; height: 30%;
+  background: linear-gradient(to bottom, rgba(0,0,0,.45), rgba(0,0,0,0));
+}
+.scrim-bottom{
+  bottom:0; height: 34%;
+  background: linear-gradient(to top, rgba(0,0,0,.55), rgba(0,0,0,0));
+}
+
+/* ---------------- Signature rail ---------------- */
+.rail{
+  position:absolute; z-index: 10;
+  right: 26px; top: 50%; transform: translateY(-50%);
+  display:flex; flex-direction:column; align-items:center;
+  height: 46vh; max-height: 420px;
+}
+.rail-label{
+  writing-mode: vertical-rl; text-orientation: mixed;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing:.22em;
+  color: var(--aluminum); margin-bottom: 14px;
+  text-shadow: 0 1px 8px rgba(0,0,0,.4);
+}
+.rail-track{
+  position:relative; width:2px; flex:1;
+  background: rgba(255,255,255,.18);
+}
+.rail-fill{
+  position:absolute; bottom:0; left:0; width:100%; height:0%;
+  background: var(--signal);
+}
+.rail-pct{
+  margin-top: 14px; font-family: var(--f-mono); font-size: 11px;
+  color: var(--paper); letter-spacing:.05em; font-variant-numeric: tabular-nums;
+  text-shadow: 0 1px 8px rgba(0,0,0,.4);
+}
+
+/* ---------------- Scroll cue ---------------- */
+.scroll-cue{
+  position:absolute; z-index:10; left: 26px; bottom: 34px;
+  display:flex; flex-direction:column; align-items:center; gap:10px;
+  font-family: var(--f-mono); font-size: 10px; letter-spacing:.22em;
+  color: var(--aluminum);
+  text-shadow: 0 1px 8px rgba(0,0,0,.4);
+  transition: opacity .5s ease;
+}
+.scroll-cue-line{
+  width:1px; height:34px; background: var(--aluminum);
+  position:relative; overflow:hidden;
+}
+.scroll-cue-line::after{
+  content:''; position:absolute; left:0; top:-100%; width:100%; height:100%;
+  background: var(--signal);
+  animation: cueMove 1.6s ease-in-out infinite;
+}
+@keyframes cueMove{
+  0%{ top:-100%; } 60%{ top:100%; } 100%{ top:100%; }
+}
+
+/* ---------------- Text steps ---------------- */
+.steps{ position:absolute; inset:0; z-index: 5; pointer-events:none; }
+.step{
+  position:absolute;
+  left: 26px; bottom: 34px;
+  max-width: 480px;
+  padding-right: 26px;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity .5s ease, transform .5s ease;
+}
+.step.is-active{ opacity:1; transform: translateY(0); }
+
+.eyebrow{
+  display:block; font-family: var(--f-mono); font-size: 11px;
+  letter-spacing:.2em; color: var(--signal); margin-bottom: 10px;
+}
+.step h2{
+  font-family: var(--f-display); font-weight: 700;
+  font-size: clamp(30px, 5vw, 52px);
+  line-height: 0.98; color: var(--paper);
+  text-shadow: 0 2px 24px rgba(0,0,0,.35);
+  margin-bottom: 12px;
+}
+.step p{
+  font-size: 15px; line-height:1.5; color: var(--aluminum);
+  max-width: 38ch;
+}
+
+/* first step sits higher & centered-ish for the hero moment */
+.step[data-start="0.00"]{
+  left: 50%; bottom: auto; top: 50%;
+  transform: translate(-50%, calc(-50% + 18px));
+  text-align:center; max-width: 620px; padding-right:0;
+}
+.step[data-start="0.00"] p{ margin: 0 auto; }
+.step[data-start="0.00"].is-active{ transform: translate(-50%, -50%); }
+
+/* ---------------- Closing ---------------- */
+.closing{
+  background: var(--asphalt);
+  min-height: 60vh;
+  display:flex; align-items:center; justify-content:center;
+  text-align:center;
+}
+.closing-inner h3{
+  font-family: var(--f-display); font-weight:700;
+  font-size: clamp(48px, 9vw, 110px);
+  color: var(--paper); line-height:1;
+}
+.replay{
+  margin-top: 26px;
+  font-family: var(--f-mono); font-size: 12px; letter-spacing:.12em;
+  color: var(--paper); background: transparent;
+  border: 1px solid var(--aluminum); padding: 12px 22px;
+  cursor: pointer; transition: background .25s ease, color .25s ease, border-color .25s ease;
+}
+.replay:hover{ background: var(--signal); border-color: var(--signal); color: var(--paper); }
+
+.caption{
+  margin-top: 40px; font-family: var(--f-mono); font-size: 11px;
+  letter-spacing:.08em; color: var(--aluminum); opacity:.7;
+}
+
+/* ---------------- Responsive ---------------- */
+@media (max-width: 720px){
+  .rail{ display:none; }
+  .step{ max-width: 88%; left: 20px; bottom: 26px; padding-right: 0; }
+  .step[data-start="0.00"]{ max-width: 86%; }
+  .chrome{ padding: 16px 18px; }
+  .wordmark{ font-size:15px; }
+  .closing-inner h3{ font-size: clamp(40px, 15vw, 70px); }
+}
+
+@media (prefers-reduced-motion: reduce){
+  .scroll-cue-line::after{ animation: none; }
+  .step, .loader, .loader-fill{ transition: none; }
+}

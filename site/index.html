@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Coastal Run — A Disassembly Study</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Big+Shoulders+Display:wght@600;700;800&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Loader -->
+  <div class="loader" id="loader">
+    <div class="loader-inner">
+      <span class="loader-eyebrow">CALIBRATING</span>
+      <span class="loader-count" id="loaderCount">000%</span>
+      <div class="loader-track"><div class="loader-fill" id="loaderFill"></div></div>
+    </div>
+  </div>
+
+  <!-- Chrome -->
+  <header class="chrome" id="chrome">
+    <div class="chrome-left">
+      <span class="wordmark">COASTAL&nbsp;RUN</span>
+      <span class="wordmark-sub">A DISASSEMBLY STUDY</span>
+    </div>
+    <div class="chrome-right">
+      <span class="frame-readout"><span id="frameNum">001</span>/<span id="frameTotal">240</span></span>
+    </div>
+  </header>
+
+  <!-- Pinned scroll stage -->
+  <div class="scroll-stage" id="scrollStage">
+    <div class="pin">
+      <canvas id="frameCanvas"></canvas>
+      <div class="scrim scrim-top"></div>
+      <div class="scrim scrim-bottom"></div>
+
+      <!-- Signature: engineering readout rail -->
+      <div class="rail">
+        <div class="rail-label">ASSEMBLY</div>
+        <div class="rail-track">
+          <div class="rail-fill" id="railFill"></div>
+        </div>
+        <div class="rail-pct" id="railPct">000%</div>
+      </div>
+
+      <!-- Scroll cue -->
+      <div class="scroll-cue" id="scrollCue">
+        <span>SCROLL</span>
+        <div class="scroll-cue-line"></div>
+      </div>
+
+      <!-- Text steps -->
+      <div class="steps">
+        <section class="step" data-start="0.00" data-end="0.13">
+          <span class="eyebrow">ENGINEERED IN MOTION</span>
+          <h2>A shape carved<br>by the coast.</h2>
+          <p>Every surface answers to airflow before it answers to style.</p>
+        </section>
+
+        <section class="step" data-start="0.15" data-end="0.30">
+          <span class="eyebrow">ACCESS</span>
+          <h2>Open to entry.</h2>
+          <p>Doors and hood move as one motion, hinged for a single fluid reveal.</p>
+        </section>
+
+        <section class="step" data-start="0.32" data-end="0.50">
+          <span class="eyebrow">STRUCTURE</span>
+          <h2>A cage before<br>a car.</h2>
+          <p>Beneath the skin, a bonded frame carries every load the road puts up.</p>
+        </section>
+
+        <section class="step" data-start="0.52" data-end="0.68">
+          <span class="eyebrow">CABIN</span>
+          <h2>Seats mounted<br>to the skeleton.</h2>
+          <p>Comfort is structural here — not upholstered on top, but built in.</p>
+        </section>
+
+        <section class="step" data-start="0.70" data-end="0.85">
+          <span class="eyebrow">POWERTRAIN</span>
+          <h2>The heart,<br>exposed.</h2>
+          <p>Engine, axles, running gear — laid bare, mid‑air, above the asphalt.</p>
+        </section>
+
+        <section class="step" data-start="0.87" data-end="1.00">
+          <span class="eyebrow">ASSEMBLY</span>
+          <h2>Whole again.</h2>
+          <p>Every part finds its place back on the road.</p>
+        </section>
+      </div>
+    </div>
+  </div>
+
+  <!-- Closing -->
+  <footer class="closing">
+    <div class="closing-inner">
+      <h3>Fin.</h3>
+      <button class="replay" id="replayBtn">↻ Replay the run</button>
+      <p class="caption">240 frames · Big Sur coastline · rendered sequence</p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
+</body>
+</html>
